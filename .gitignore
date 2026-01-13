@@ -179,6 +179,6 @@ cython_debug/
 
 # Figures
 figures/*.eps
-figures/*.png
+# figures/*.png  # Commented out to allow committing result figures
 
 *.npy

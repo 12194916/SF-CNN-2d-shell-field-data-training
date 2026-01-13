@@ -117,7 +117,7 @@ def tensor_interp2d(grid, pts, epsilon = 1e-9, method = "smoothstep"):
         step = linstep
 
     pts = pts.view(-1,2)
-    pts = pts.clip(min = torch.tensor(epsilon), max = torch.tensor(1 - epsilon))
+    pts = pts.clip(min = torch.tensor(epsilon, device=pts.device), max = torch.tensor(1 - epsilon, device=pts.device))
     size = grid.shape
     grid = torch.transpose(grid,1,2)
     if 2 == len(size):

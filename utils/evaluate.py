@@ -20,8 +20,8 @@ def get_r2(a,b):
     return R2
 
 def plot_model_r2(model, data, lims=None, size=1):
-    pred = model(data).detach().numpy()
-    gt = data.y.detach().numpy()
+    pred = model(data).detach().cpu().numpy()
+    gt = data.y.detach().cpu().numpy()
     plot_r2(gt, pred, lims=lims, size=size)
 
 def plot_r2(a, b, lims=None, size=1):
@@ -43,18 +43,24 @@ def plot_r2(a, b, lims=None, size=1):
     plt.ylim(y)
 
 def eval_model(model, data):
-    ''' 
+    '''
     evaluate_model: Runs a model and computes the R-squared value on a single data point
-    
+
     model - The model to evaluate
     data - the data point
-    
+
     Returns
     - The R2 value from using 'model' to predict the field in 'data'
     '''
 
-    pred = model(data).detach().numpy().flatten()
-    gt = data.y.detach().numpy().flatten()
+    # Move data to same device as model
+    device = next(model.parameters()).device
+    data.x = data.x.to(device)
+    data.y = data.y.to(device)
+    data.sdf = data.sdf.to(device)
+
+    pred = model(data).detach().cpu().numpy().flatten()
+    gt = data.y.detach().cpu().numpy().flatten()
 
     return get_r2(gt, pred)
 

@@ -29,6 +29,12 @@ def train_model(model, dataset, valset = None, epochs = 50, lr = 0.001, print_pr
         for i, k in enumerate(indices):
             data = dataset[k]
 
+            # Move data to same device as model
+            device = next(model.parameters()).device
+            data.x = data.x.to(device)
+            data.y = data.y.to(device)
+            data.sdf = data.sdf.to(device)
+
             model.train()
             out = model(data)
             loss = F.mse_loss(out, data.y)
@@ -41,7 +47,11 @@ def train_model(model, dataset, valset = None, epochs = 50, lr = 0.001, print_pr
             if valset is not None:
                 model.eval()
                 idx = val_indices[i % len(val_indices)]
-                loss_val.append(F.mse_loss(model(valset[idx]), valset[idx].y).item())
+                val_data = valset[idx]
+                val_data.x = val_data.x.to(device)
+                val_data.y = val_data.y.to(device)
+                val_data.sdf = val_data.sdf.to(device)
+                loss_val.append(F.mse_loss(model(val_data), val_data.y).item())
 
             if print_progress:
                 print("\r[%-25s]       \r" %("========================="[24-int(25*i/800):]),end="",flush=True)

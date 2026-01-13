@@ -57,9 +57,9 @@ def plot_graph(xy, node_color='black', node_size = 100,
     return handle
 
 def plot_data(data, colors="black", color_bounds=None, label = None, size=30, width=1, colorbar=True, cmap="jet"):
-    xy = data.x[:,:2].detach().numpy()
-    node_color = colors.detach().numpy() if type(colors) == torch.Tensor else colors
-    handle = plot_graph(xy, node_color=node_color, node_size=size, 
+    xy = data.x[:,:2].detach().cpu().numpy()
+    node_color = colors.detach().cpu().numpy() if type(colors) == torch.Tensor else colors
+    handle = plot_graph(xy, node_color=node_color, node_size=size,
                         color_bounds=color_bounds, label=label, linewidth=width, colorbar=colorbar, cmap=cmap)
     return handle
 
@@ -70,12 +70,20 @@ def plot_comparison(model, shapes, filename=None, dpi=300, size=15):
     plt.figure(figsize=(16, 4.6*N), dpi=dpi)
     rhs_axes = []
 
+    # Get model device
+    device = next(model.parameters()).device
+
     for i, data in enumerate(shapes):
+        # Move data to device
+        data.x = data.x.to(device)
+        data.y = data.y.to(device)
+        data.sdf = data.sdf.to(device)
+
         gt = data.y
         pred = model(data)
         s = size / (1 + 7*(3000<data.x.shape[0]))
-        maxval = max(torch.max(gt).detach().numpy(), torch.max(pred).detach().numpy())
-        maxerr = np.max(torch.abs(gt-pred).detach().numpy())
+        maxval = max(torch.max(gt).detach().cpu().numpy(), torch.max(pred).detach().cpu().numpy())
+        maxerr = np.max(torch.abs(gt-pred).detach().cpu().numpy())
 
         plt.subplot(N,4,1+i*4)
         plot_data(data, data.y, size=s, label="Ground Truth", color_bounds=[0,maxval])

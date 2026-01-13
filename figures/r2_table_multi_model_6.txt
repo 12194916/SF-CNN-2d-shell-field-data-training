@@ -1,0 +1,11 @@
+
+R² Performance Table - multi_model_6
+=====================================
+
+Dataset Split    | Median R²  | Mean R²   | Min R²   | Max R²
+-----------------|------------|-----------|----------|----------
+Training         | 0.931     | 0.929    | 0.495   | 0.987
+Testing          | 0.915     | 0.909    | 0.518   | 0.984
+
+Total Samples: 1600 training, 400 testing
+Model: ../models/multi_model_6.pth
