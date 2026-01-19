@@ -16,7 +16,6 @@ This repository includes a trained model (`multi_model_6.pth`) with GPU support 
 **Training Details:**
 - Dataset: 1600 combined Voronoi + Lattice geometries
 - Architecture: 6 pooling layers, 20 filters
-- Training time: ~7 minutes on NVIDIA RTX 3060 Ti
 - Model parameters: 34,981
 
 ### Visualization Results
@@ -70,8 +69,6 @@ Downloads 9 datasets (Voronoi + Lattice shapes, stress + temperature fields)
 python scripts/train_single_model.py
 ```
 - Trains on 1600 samples
-- ~7 min on GPU (RTX 3060 Ti)
-- ~60 min on CPU
 - Saves to `models/multi_model_6.pth`
 
 **Full training** (all 11 models from paper):
@@ -165,7 +162,6 @@ sfp-cnn/
 
 ✅ **GPU Acceleration**: Automatic CUDA device detection
 ✅ **Pre-trained Model**: Ready-to-use `multi_model_6.pth`
-✅ **Fast Training**: ~7 minutes on modern GPU
 ✅ **2D Mesh Support**: Arbitrary triangular meshes
 ✅ **Stress Prediction**: Von Mises stress field estimation
 ✅ **Visualization Tools**: Built-in plotting for results
